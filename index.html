@@ -66,4 +66,234 @@
       font-size: 0.9rem;
       font-style: italic;
       margin: 8px 0 0 0;
-      font-weight: 400
+      font-weight: 400;
+    }
+
+    /* Okienko z pytaniem (Oddzielny prostokąt) */
+    .window-card {
+      background: var(--window-body);
+      border: 3px solid #000;
+      border-radius: 15px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    .window-top {
+      background: var(--window-header);
+      border-bottom: 3px solid #000;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .window-circles {
+      width: 12px;
+      height: 12px;
+      background: #000;
+      border-radius: 50%;
+      box-shadow: 20px 0 0 #000, 40px 0 0 #000;
+    }
+
+    .window-content {
+      padding: 25px 20px;
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    /* Układ odpowiedzi (Grid) */
+    .options-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 400px) {
+      .options-container { 
+        grid-template-columns: 1fr 1fr; 
+      }
+    }
+
+    .option-pill {
+      background: var(--btn-yellow);
+      border: 3px solid #000;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #000;
+      transition: all 0.1s ease;
+    }
+
+    .option-pill.selected {
+      background: var(--selected-green) !important;
+      color: #fff;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #000;
+    }
+
+    /* Dolne przyciski */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .nav-btn {
+      background: #fff;
+      border: 3px solid #000;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px #000;
+      text-transform: uppercase;
+    }
+
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Ekran Wyniku */
+    .result-window {
+      background: #fff;
+      border: 3px solid #000;
+      border-radius: 15px;
+      width: 100%;
+      padding: 30px 20px;
+      text-align: center;
+      display: none;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.4);
+    }
+
+    .result-window.active { display: block; }
+
+    .logo-box {
+      width: 60px;
+      height: 60px;
+      background: #000;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+    }
+
+    .result-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; }
+    .result-desc { font-size: 0.95rem; color: #444; line-height: 1.5; margin-bottom: 20px; }
+
+    .step { display: none; }
+    .step.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    
+    <div class="header-box" id="quizHeader">
+      <h1>Czas na Quiz</h1>
+      <p class="lead">Sprawdź, jaką korzyścią Empik Premium jesteś!</p>
+    </div>
+
+    <div style="width:100%; display:flex; flex-direction:column; gap:15px;" id="quizWrapper">
+      <div class="window-card">
+        <div class="window-top"><div class="window-circles"></div></div>
+        <div class="window-content">
+          <div class="step active" id="step0"><div class="question-text">1. Jesteś osobą spontaniczną i lubisz działać pod wpływem chwili?</div></div>
+          <div class="step" id="step1"><div class="question-text">2. Które wartości cenisz najbardziej w codziennej pracy?</div></div>
+          <div class="step" id="step2"><div class="question-text">3. Jakie treści w wolnym czasie najbardziej Ci odpowiadają?</div></div>
+          <div class="step" id="step3"><div class="question-text">4. Która strefa w salonie jest Ci obecnie najbliższa?</div></div>
+        </div>
+      </div>
+      <div class="options-container" id="optionsGrid"></div>
+      <div class="controls">
+        <button class="nav-btn" id="backBtn" disabled>Wstecz</button>
+        <button class="nav-btn" id="nextBtn" disabled>Dalej</button>
+      </div>
+    </div>
+
+    <div class="result-window" id="resultWindow">
+      <div class="logo-box" id="resultEmoji">E</div>
+      <div class="result-title" id="resultTitle">Korzyść dla Ciebie</div>
+      <div class="result-desc" id="resultDesc">Opis dopasowania</div>
+      <button class="nav-btn" id="againBtn" style="width: 100%;">Powtórz Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    const benefits = [
+      { id: 'zniżki', title: "Zniżka -40% na drugą i -70% na trzecią książkę", emoji: '📚', desc: 'Stawiasz na samorozwój, więc ta korzyść na pewno przyda Ci się przy kolejnych książkowych wyborach!' },
+      { id: 'spokój', title: "Treści audio i e-booki w Empik Go", emoji: '🎧', desc: 'Cenisz sobie chwile relaksu, dlatego idealnie sprawdzi się u Ciebie nielimitowany dostęp do dobrych historii.' },
+      { id: 'rozwój', title: "Stałe -15% na zakupy w salonach", emoji: '🏛️', desc: 'Jesteś stabilnym filarem zespołu i lubisz konkrety, dlatego stała zniżka to Twój pewniak.' },
+      { id: 'nowosci', title: "Darmowa dostawa do Paczkomatów", emoji: '📦', desc: 'Cenisz pełną swobodę i dynamiczne działanie. Ten benefit idealnie dopełni Twoje tempo!' }
+    ];
+
+    const questions = [
+      { options: [{ text: "TAK", s: { zniżki: 2, nowosci: 1 } }, { text: "NIE", s: { spokój: 2, rozwój: 1 } }] },
+      { options: [{ text: "ROZWÓJ", s: { zniżki: 2, rozwój: 1 } }, { text: "WYGODA", s: { nowosci: 2, spokój: 1 } }] },
+      { options: [{ text: "KSIĄŻKI", s: { zniżki: 2, rozwój: 1 } }, { text: "AUDIO", s: { spokój: 2, nowosci: 1 } }] },
+      { options: [{ text: "NOWOŚCI", s: { nowosci: 2, zniżki: 1 } }, { text: "KASA", s: { rozwój: 2, spokój: 1 } }] }
+    ];
+
+    let current = 0;
+    const answers = new Array(questions.length).fill(null);
+
+    const render = (step) => {
+      document.querySelectorAll('.step').forEach((el, i) => el.classList.toggle('active', i === step));
+      const grid = document.getElementById('optionsGrid');
+      grid.innerHTML = '';
+      questions[step].options.forEach(o => {
+        const b = document.createElement('div');
+        b.className = 'option-pill' + (answers[step] === o ? ' selected' : '');
+        b.textContent = o.text;
+        b.onclick = () => {
+          answers[step] = o;
+          render(step);
+          document.getElementById('nextBtn').disabled = false;
+        };
+        grid.appendChild(b);
+      });
+      document.getElementById('backBtn').disabled = step === 0;
+      document.getElementById('nextBtn').textContent = step === 3 ? 'Zakończ' : 'Dalej';
+      document.getElementById('nextBtn').disabled = !answers[step];
+    };
+
+    document.getElementById('nextBtn').onclick = () => {
+      if (current < 3) { current++; render(current); } 
+      else {
+        const res = { zniżki: 0, spokój: 0, rozwój: 0, nowosci: 0 };
+        answers.forEach(a => Object.keys(a.s).forEach(k => res[k] += a.s[k]));
+        let best = 'zniżki';
+        Object.keys(res).forEach(k => { if(res[k] > res[best]) best = k; });
+        const win = benefits.find(b => b.id === best);
+        document.getElementById('quizWrapper').style.display = 'none';
+        document.getElementById('resultEmoji').textContent = win.emoji;
+        document.getElementById('resultTitle').textContent = win.title;
+        document.getElementById('resultDesc').textContent = win.desc;
+        document.getElementById('resultWindow').classList.add('active');
+      }
+    };
+
+    document.getElementById('backBtn').onclick = () => { current--; render(current); };
+    document.getElementById('againBtn').onclick = () => location.reload();
+    render(0);
+  </script>
+</body>
+</html>
+
+Pamiętaj, że po wklejeniu kodu na GitHubie musisz poczekać około minuty na aktualizację Twojego linku. Mam nadzieję, że teraz wszystko wygląda dokładnie tak, jak zaplanowałaś! 😉
