@@ -278,7 +278,7 @@
     
     <div class="quiz-time-header" id="mainHeader">
       <h1><span>Czas na</span> Quiz</h1>
-      <p class="lead">Sprawdź, jaką korzyścią Empik Premium jesteś!</p>
+      <p class="lead">Sprawdź, którą korzyścią Empik Premium jesteś!Zaznacz odpowiedź, która najbardziej do Ciebie pasuje.</p>
     </div>
 
     <div style="width:100%; display:flex; flex-direction:column; gap:20px;" id="quizWrapper">
@@ -291,16 +291,16 @@
         
         <div class="window-content">
           <div class="step active" id="step0">
-            <div class="question-text">Jesteś osobą spontaniczną i lubisz działać pod wpływem chwili?</div>
+            <div class="question-text">Czy jesteś osobą spontaniczną i lubisz działać pod wpływem chwili?</div>
           </div>
           <div class="step" id="step1">
-            <div class="question-text">Które wartości cenisz najbardziej w swojej codziennej pracy?</div>
+            <div class="question-text">Co w swojej codziennej pracy cenisz najbardziej?</div>
           </div>
           <div class="step" id="step2">
-            <div class="question-text">Jakie treści w wolnym czasie najbardziej poprawiają Ci humor?</div>
+            <div class="question-text">Co w wolnym czasie najbardziej poprawiają Ci humor?</div>
           </div>
           <div class="step" id="step3">
-            <div class="question-text">Który dział w salonie jest najbliższy Twojemu sercu?</div>
+            <div class="question-text">Który dział w salonie Empik jest najbliższy Twojemu sercu?</div>
           </div>
         </div>
       </div>
@@ -321,42 +321,41 @@
       <button class="nav-btn" id="againBtn" style="width: 100%;">Zagraj jeszcze raz</button>
     </div>
 
-    <div class="watermark">@empikedu</div>
 
   </div>
 
   <script>
     // Konfiguracja korzyści i pytań
     const benefits = [
-      { id: 'zniżki', title: "Zniżka -40% na drugą i -70% na trzecią książkę!", emoji: '📚', desc: 'Stawiasz na nieustanny samorozwój i pochłaniasz wiedzę tonami, więc ta kultowa korzyść idealnie zasili Twoją domową bibliotekę!' },
-      { id: 'spokój', title: "Nielimitowane audiobooki i e-booki w Empik Go!", emoji: '🎧', desc: 'Cenisz sobie harmonię, spokój i chwile tylko dla siebie. Odcięcie się ze słuchawkami i dobrą historią to Twój idealny plan na relaks.' },
-      { id: 'rozwój', title: "Stałe -15% na zakupy w salonach stacjonarnych!", emoji: '🏛️', desc: 'Jesteś stabilnym filarem zespołu, działasz konkretnie i cenisz tradycyjne rozwiązania. Ta zniżka to Twój codzienny empiwowski as w rękawie.' },
-      { id: 'nowosci', title: "Darmowa dostawa kurierem i do Paczkomatów!", emoji: '📦', desc: 'Cenisz sobie pełną swobodę, niezależność i szybkie tempo działania. Nie lubisz ograniczeń, dlatego darmowa dostawa idealnie dotrzymuje Ci kroku!' }
+      { id: 'zniżki', title: "Zniżka -40% na drugą i -70% na trzecią książkę!", emoji: '📖', desc: 'Stawiasz na nieustanny samorozwój i pochłaniasz wiedzę tonami, więc ta korzyść idealnie zasili Twoją domową bibliotekę!' },
+      { id: 'spokój', title: "Zniżka -20% na bilety do Multikina", emoji: '🎥', desc: 'Stawiasz na maksymalny relaks, śledzenie filmowych premier i dobre kino, dlatego ta zniżka idealnie uzupełni Twoje plany na kulturalny chillout po godzinach!' },
+      { id: 'rozwój', title: "Stałe -15% na zakupy w salonach stacjonarnych!", emoji: '🛒', desc: 'Jesteś stabilnym filarem zespołu, działasz konkretnie i cenisz tradycyjne rozwiązania. Ta zniżka to Twój codzienny as w rękawie.' },
+      { id: 'nowosci', title: "Darmowa dostawa do salonu, kurierem i do Paczkomatu!", emoji: '📦', desc: 'Cenisz sobie pełną swobodę, niezależność i szybkie tempo działania. Nie lubisz ograniczeń, dlatego darmowa dostawa idealnie dotrzymuje Ci kroku!' }
     ];
 
     const questionsData = [
       {
         options: [
           { text: "A) Tak, działam spontanicznie i pod wpływem impulsu!", scores: { zniżki: 2, nowosci: 1 } },
-          { text: "B) Nie, zdecydowanie wolę mieć plan na każdy krok.", scores: { spokój: 2, rozwój: 1 } }
+          { text: "B) Nie, zdecydowanie wolę mieć plan i wszystko zorganizowane.", scores: { spokój: 2, rozwój: 1 } }
         ]
       },
       {
         options: [
-          { text: "A) Ciągłe odkrywanie nowości i poszerzanie horyzontów", scores: { zniżki: 2, nowosci: 1 } },
-          { text: "B) Stabilizacja, wygoda i dobrze poukładane procesy", scores: { rozwój: 2, spokój: 1 } }
+          { text: "A) Ciągłe odkrywanie nowości i poszerzanie swojej wiedzy", scores: { rozwój: 2, nowosci: 1 } },
+          { text: "B) Atmosferę w pracy i zespół, na którym mogę polegać", scores: { zniżki: 2, spokój: 1 } }
         ]
       },
       {
         options: [
           { text: "A) Dobra, wciągająca książka w papierze", scores: { zniżki: 2, rozwój: 1 } },
-          { text: "B) Ciekawy podcast, muzyka lub wciągający serial", scores: { spokój: 2, nowosci: 1 } }
+          { text: "B) Ciekawy, wciągający serial lub dobry, nowy film", scores: { spokój: 2, nowosci: 1 } }
         ]
       },
       {
         options: [
-          { text: "A) Nowości, bestsellery oraz dział pełen inspiracji", scores: { nowosci: 2, zniżki: 1 } },
-          { text: "B) Kasa salonowa i bezpośrednie rozmowy z klientami", scores: { rozwój: 2, spokój: 1 } }
+          { text: "A) Nowości, bestsellery oraz topki", scores: { nowosci: 2, zniżki: 1 } },
+          { text: "B) Muzyka, zabawka i art. pap.", scores: { rozwój: 2, spokój: 1 } }
         ]
       }
     ];
